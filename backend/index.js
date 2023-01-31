@@ -7,4 +7,4 @@ app.get('/test', (req, res) => {
     res.json("Test ok")
 })
 
-app.listen(5000)
+app.listen(4000)
