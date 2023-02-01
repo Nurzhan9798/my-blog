@@ -6,10 +6,26 @@ const RegistrationPage = (props) => {
     const username = useInput("");
     const password = useInput("");
 
-    const handleSubmit = (event) => {
+    const handleSubmit = async (event) => {
         event.preventDefault();
-        console.log(username.value);
-        console.log(password.value);
+        const response = await fetch('http://localhost:4000/registration',
+            {
+                method: 'POST',
+                body: JSON.stringify(
+                    {
+                        username: username.value,
+                        password: password.value
+                    }
+                ),
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            })
+        if (response.status !== 200) {
+            alert("error")
+        } else {
+            alert("success");
+        }
     }
 
     return (

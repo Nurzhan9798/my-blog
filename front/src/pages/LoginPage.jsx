@@ -1,15 +1,36 @@
-import React from 'react';
+import React, {useState} from 'react';
 import {useInput} from "../hooks/useInput";
+import {useNavigate} from "react-router-dom";
 
 const LoginPage = (props) => {
 
     const username = useInput("");
     const password = useInput("");
+    const navigate = useNavigate();
+    const [error, setError] = useState(false)
 
-    const handleSubmit = (event) => {
+    const handleSubmit = async (event) => {
         event.preventDefault();
-        console.log(username.value);
-        console.log(password.value);
+        const response = await fetch('http://localhost:4000/login',
+            {
+                method: 'POST',
+                body: JSON.stringify(
+                    {
+                        username: username.value,
+                        password: password.value
+                    }
+                ),
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                credentials: 'include'
+            })
+
+        if (response.ok) {
+            navigate("/");
+        } else {
+            setError(true)
+        }
     }
 
     return (
@@ -18,6 +39,7 @@ const LoginPage = (props) => {
                 <form className="form" onSubmit={handleSubmit}>
                     <input type="text" className="form__input" placeholder="username" {...username}/>
                     <input type="password" className="form__input" placeholder="password" {...password}/>
+                    {error && <label style={{color: 'red'}}>Try again!</label>}
                     <button className="form__button">Login</button>
                 </form>
             </div>
