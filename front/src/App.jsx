@@ -6,6 +6,7 @@ import LoginPage from "./pages/LoginPage";
 import NotFoundPage from "./pages/NotFoundPage";
 import RegistrationPage from "./pages/RegistrationPage";
 import CreatePost from "./pages/CreatePost";
+import ViewPost from "./pages/ViewPost";
 
 function App() {
   return (
@@ -16,6 +17,7 @@ function App() {
           <Route path="login" element={<LoginPage />} />
           <Route path="registration" element={<RegistrationPage />} />
           <Route path="create" element={<CreatePost />} />
+          <Route path="post/:postId" element={<ViewPost />} />
         </Route>
         <Route path="*" element={<NotFoundPage />} />
       </Routes>

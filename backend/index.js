@@ -78,21 +78,40 @@ app.get("/profile", (req, res) => {
 });
 
 app.post("/post", upload.single("cover"), async (req, res) => {
-  // req.file - файл `avatar`
-  // req.body сохранит текстовые поля, если они будут
   const { originalname, path } = req.file;
   const parts = originalname.split(".");
   const ext = parts[parts.length - 1];
   const newPath = path + "." + ext;
   fs.renameSync(path, newPath);
   const { title, summary, content } = req.body;
-  const postDoc = await Post.create({
-    title,
-    summary,
-    content,
-    cover: newPath,
-  });
+  const { token } = req.cookies;
+  try {
+    jwt.verify(token, jwtSecret, {}, async (err, info) => {
+      if (err) throw err;
+      const postDoc = await Post.create({
+        title,
+        summary,
+        content,
+        cover: newPath,
+        author: info.id,
+      });
 
+      res.json(postDoc);
+    });
+  } catch (e) {
+    res.status(400).json(e.message);
+  }
+});
+
+app.get("/posts", async (req, res) => {
+  res.json(await Post.find().populate("author", ["username"]));
+});
+
+app.get("/posts/:postId", async (req, res) => {
+  const { postId } = req.params;
+  const postDoc = await Post.findOne({ _id: postId }).populate("author", [
+    "username",
+  ]);
   res.json(postDoc);
 });
 

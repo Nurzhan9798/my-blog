@@ -1,27 +1,20 @@
 import React from "react";
+import { formatISO9075 } from "date-fns";
+import { Link } from "react-router-dom";
 
-const Post = (props) => {
+const Post = ({ _id, title, cover, summary, createdAt, author }) => {
   return (
     <div className="post">
-      <img
-        src="https://global-uploads.webflow.com/5ef5480befd392489dacf544/5f9f5e5943de7e69a1339242_5f44a7398c0cdf460857e744_img-image.jpeg"
-        alt=""
-        className="post__img"
-      />
+      <img src={"http://localhost:4000/" + cover} className="post__img" />
       <div className="post__body">
         <h2 className="post__title">
-          <a href="/post">Post Title</a>
+          <Link to={`/post/${_id}`}>{title}</Link>
         </h2>
         <div className="post__info">
-          <p className="post__author">post author</p>
-          <p className="post__date">post date</p>
+          <p className="post__author">{author && author.username}</p>
+          <p className="post__date">{formatISO9075(new Date(createdAt))}</p>
         </div>
-        <p className="post__summary">
-          Lorem ipsum dolor sit amet, consectetur adipisicing elit. Architecto
-          aspernatur consequuntur esse est laudantium maxime, minima modi nam
-          nobis non optio quia quisquam, repellendus sunt tempora veniam vero
-          voluptates. Facere.
-        </p>
+        <p className="post__summary">{summary}</p>
       </div>
     </div>
   );

@@ -50,6 +50,7 @@ const CreatePost = () => {
     fetch("http://localhost:4000/post", {
       method: "POST",
       body: data,
+      credentials: "include",
     });
   };
 
